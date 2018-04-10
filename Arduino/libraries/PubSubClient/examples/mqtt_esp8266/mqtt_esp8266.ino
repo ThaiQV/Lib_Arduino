@@ -22,15 +22,21 @@
   - Select your ESP8266 in "Tools -> Board"
 
 */
-
-#include <ESP8266WiFi.h>
+// #include <SPI.h>
+// #include <ESP8266WiFi.h>
+#include <WiFi.h>
 #include <PubSubClient.h>
 
 // Update these with values suitable for your network.
 
-const char* ssid = "........";
-const char* password = "........";
-const char* mqtt_server = "broker.mqtt-dashboard.com";
+const char* ssid = "AndroidAP";
+const char* password = "duzm8628";
+const char* mqtt_server = "http://192.168.43.180";
+const char* port = 3000;
+const char* IDBroker = "thaivu";
+const char* PassBroker = "12345678x@X";
+const char* myID = "ESP32";
+const char* data = '{ "name": "humminity", "value": "80"}';
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -42,8 +48,8 @@ void setup() {
   pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
   setup_wifi();
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
+  client.setServer(mqtt_server, port);
+  // client.setCallback(callback);
 }
 
 void setup_wifi() {
@@ -92,12 +98,12 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect("ESP8266Client")) {
+    if (client.connect(myID,IDBroker,PassBroker)) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      client.publish("outTopic", "hello world");
+      client.publish("temp",data);
       // ... and resubscribe
-      client.subscribe("inTopic");
+      client.subscribe("temp");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -109,18 +115,18 @@ void reconnect() {
 }
 void loop() {
 
-  if (!client.connected()) {
+  if (!client.connected(myID)) {
     reconnect();
   }
   client.loop();
 
-  long now = millis();
-  if (now - lastMsg > 2000) {
-    lastMsg = now;
-    ++value;
-    snprintf (msg, 75, "hello world #%ld", value);
-    Serial.print("Publish message: ");
-    Serial.println(msg);
-    client.publish("outTopic", msg);
-  }
+  // long now = millis();
+  // if (now - lastMsg > 2000) {
+  //   lastMsg = now;
+  //   ++value;
+  //   snprintf (msg, 75, "hello world #%ld", value);
+  //   Serial.print("Publish message: ");
+  //   Serial.println(msg);
+  //   client.publish("outTopic", msg);
+  // }
 }
