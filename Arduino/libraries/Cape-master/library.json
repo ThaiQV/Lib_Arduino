@@ -1,0 +1,28 @@
+{
+  "name": "Cape",
+  "description": "Cape is a string encryption library developed to offer efficient encryption on limited microcontrollers.",
+  "keywords": "encryption",
+  "authors":
+  {
+    "name": "Giovanni Blu Mitolo",
+    "email": "gioscarab@gmail.com"
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/gioblu/Cape.git"
+  },
+  "version": "3.0",
+  "frameworks": [
+    "arduino",
+    "wiringpi"
+  ],
+  "platforms": [
+    "atmelavr",
+    "atmelsam",
+    "espressif8266",
+    "teensy",
+    "linux_x86_64",
+    "windows_x86"
+  ]
+}
